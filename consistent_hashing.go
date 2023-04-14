@@ -1,27 +1,28 @@
 package main
 
-const defaultRingSize = 1000
-
 type consistentHashing struct {
 	arr  []string
 	hash Hash
+
+	ringSize int
 }
 
-func NewConsistentHashing() consistentHashing {
+func NewConsistentHashing(ringSize int) consistentHashing {
 	return consistentHashing{
-		arr:  make([]string, defaultRingSize),
-		hash: NewHash(),
+		arr:      make([]string, ringSize),
+		hash:     NewHash(),
+		ringSize: ringSize,
 	}
 }
 
 func (ch *consistentHashing) PlotKey(key string) int {
-	hashKey := ch.hash.hash(key, 1000, 1)
+	hashKey := ch.hash.hash(key, ch.ringSize, 1)
 	ch.arr[hashKey] = key
 	return hashKey
 }
 
 func (ch *consistentHashing) PlotServer(name string) int {
-	hashKey := ch.hash.hash(name, 1000, 1)
+	hashKey := ch.hash.hash(name, ch.ringSize, 1)
 	ch.arr[hashKey] = name
 	return hashKey
 }

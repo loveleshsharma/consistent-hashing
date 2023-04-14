@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestConsistentHashing_PlotKey_ShouldPlotKeyOnTheRingAsPerTheHashValue(t *testing.T) {
-	testConsistentHashing := NewConsistentHashing()
+	testConsistentHashing := NewConsistentHashing(1000)
 
 	expectedHashKey := 860
 	actualHashKey := testConsistentHashing.PlotKey("key-example")
@@ -20,7 +20,7 @@ func TestConsistentHashing_PlotKey_ShouldPlotKeyOnTheRingAsPerTheHashValue(t *te
 }
 
 func TestConsistentHashing_PlotServer_ShouldPlotServerOnTheRingAsPerTheHashValue(t *testing.T) {
-	testConsistentHashing := NewConsistentHashing()
+	testConsistentHashing := NewConsistentHashing(1000)
 
 	expectedHashKey := 74
 	actualHashKey := testConsistentHashing.PlotServer("server-example")

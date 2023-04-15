@@ -14,8 +14,12 @@ func TestConsistentHashing_PlotKey_ShouldPlotKeyOnTheRingAsPerTheHashValue(t *te
 
 	actualValue := testConsistentHashing.getHashValue(expectedHashKey)
 
-	if actualValue != "key-example" {
-		t.Errorf("value should be: %s but it is: %s", "key-example", actualValue)
+	if actualObj, ok := actualValue.(Key); ok {
+		if actualObj.name != "key-example" {
+			t.Errorf("value should be: %s but it is: %s", "key-example", actualValue)
+		}
+	} else {
+		t.Errorf("value is not of Key type: %v", actualValue)
 	}
 }
 
@@ -31,7 +35,11 @@ func TestConsistentHashing_PlotServer_ShouldPlotServerOnTheRingAsPerTheHashValue
 
 	actualValue := testConsistentHashing.getHashValue(expectedHashKey)
 
-	if actualValue != "server-example" {
-		t.Errorf("value should be: %s but it is: %s", "server-example", actualValue)
+	if actualObj, ok := actualValue.(Server); ok {
+		if actualObj.name != "server-example" {
+			t.Errorf("value should be: %s but it is: %s", "server-example", actualValue)
+		}
+	} else {
+		t.Errorf("value is not of server type: %v", actualValue)
 	}
 }

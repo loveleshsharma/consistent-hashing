@@ -5,7 +5,7 @@ import "testing"
 func TestConsistentHashing_PlotKey_ShouldPlotKeyOnTheRingAsPerTheHashValue(t *testing.T) {
 	testConsistentHashing := NewConsistentHashing(1000)
 
-	expectedHashKey := 860
+	expectedHashKey := 718
 	actualHashKey := testConsistentHashing.PlotKey("key-example")
 
 	if actualHashKey != expectedHashKey {
@@ -26,7 +26,7 @@ func TestConsistentHashing_PlotKey_ShouldPlotKeyOnTheRingAsPerTheHashValue(t *te
 func TestConsistentHashing_PlotServer_ShouldPlotServerOnTheRingAsPerTheHashValue(t *testing.T) {
 	testConsistentHashing := NewConsistentHashing(1000)
 
-	expectedHashKey := 74
+	expectedHashKey := 29
 	actualHashKey := testConsistentHashing.PlotServer("server-example")
 
 	if actualHashKey != expectedHashKey {
@@ -41,5 +41,26 @@ func TestConsistentHashing_PlotServer_ShouldPlotServerOnTheRingAsPerTheHashValue
 		}
 	} else {
 		t.Errorf("value is not of server type: %v", actualValue)
+	}
+}
+
+func TestConsistentHashing_GetServer_ShouldReturnServerForTheKey(t *testing.T) {
+	testConsistentHashing := NewConsistentHashing(50)
+
+	testConsistentHashing.PlotServer("s1")
+	testConsistentHashing.PlotKey("k1")
+	testConsistentHashing.PlotKey("k2")
+
+	expectedServer := "s1"
+	actualServer := testConsistentHashing.GetServer("k1")
+
+	if actualServer.name != expectedServer {
+		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)
+	}
+
+	actualServer = testConsistentHashing.GetServer("k2")
+
+	if actualServer.name != expectedServer {
+		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)
 	}
 }

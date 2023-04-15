@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type consistentHashing struct {
 	arr  []interface{}
 	hash Hash
@@ -9,24 +11,65 @@ type consistentHashing struct {
 
 func NewConsistentHashing(ringSize int) consistentHashing {
 	return consistentHashing{
-		arr:      make([]interface{}, ringSize),
+		arr:      make([]interface{}, ringSize-1),
 		hash:     NewHash(),
-		ringSize: ringSize,
+		ringSize: ringSize - 1,
 	}
 }
 
+func (ch *consistentHashing) GetServer(key string) Server {
+	hashKey := ch.getHashKey(key)
+
+	var i = hashKey
+	var condition = ch.ringSize
+
+	//key is at the last index
+	if hashKey == ch.ringSize {
+		i = 0
+		condition = hashKey
+
+		for ; i < condition; i++ {
+			if server, ok := ch.arr[i].(Server); ok {
+				fmt.Printf("found server: %s\n", server.name)
+				return server
+			}
+
+		}
+	} else {
+		for ; i < condition; i++ {
+			if server, ok := ch.arr[i].(Server); ok {
+				fmt.Printf("found server: %s\n", server.name)
+				return server
+			}
+
+			if i == condition-1 {
+				i = 0
+				condition = hashKey
+				continue
+			}
+		}
+	}
+
+	fmt.Printf("no server was found in the ring!\n")
+	return Server{}
+}
+
 func (ch *consistentHashing) PlotKey(key string) int {
-	hashKey := ch.hash.hash(key, ch.ringSize, 1)
+	hashKey := ch.getHashKey(key)
 	ch.arr[hashKey] = NewKey(key)
 	return hashKey
 }
 
 func (ch *consistentHashing) PlotServer(name string) int {
-	hashKey := ch.hash.hash(name, ch.ringSize, 1)
+	hashKey := ch.getHashKey(name)
 	ch.arr[hashKey] = NewServer(name)
 	return hashKey
 }
 
 func (ch *consistentHashing) getHashValue(index int) interface{} {
 	return ch.arr[index]
+}
+
+func (ch *consistentHashing) getHashKey(key string) int {
+	return ch.hash.hash(key, ch.ringSize, 1)
 }

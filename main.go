@@ -6,20 +6,20 @@ func main() {
 
 	ch := NewConsistentHashing(1000)
 
-	ch.PlotServer("s1")
-	ch.PlotServer("s2")
-	ch.PlotServer("s3")
+	ch.PlotServer(NewServer("s1"))
+	ch.PlotServer(NewServer("s2"))
+	ch.PlotServer(NewServer("s3"))
 
-	ch.PlotKey("k3")
-	ch.PlotKey("k2")
-	ch.PlotKey("k1")
+	ch.PlotKey(NewKey("k3"))
+	ch.PlotKey(NewKey("k2"))
+	ch.PlotKey(NewKey("k1"))
 
-	sr1 := ch.GetServer("k1")
+	sr1 := ch.GetServer(NewKey("k1"))
 	fmt.Println("server for k1: ", sr1.name)
 
-	sr2 := ch.GetServer("k2")
+	sr2 := ch.GetServer(NewKey("k2"))
 	fmt.Println("server for k2: ", sr2.name)
 
-	sr3 := ch.GetServer("k3")
+	sr3 := ch.GetServer(NewKey("k3"))
 	fmt.Println("server for k3: ", sr3.name)
 }

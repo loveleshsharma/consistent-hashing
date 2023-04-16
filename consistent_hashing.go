@@ -17,8 +17,8 @@ func NewConsistentHashing(ringSize int) consistentHashing {
 	}
 }
 
-func (ch *consistentHashing) GetServer(key string) Server {
-	hashKey := ch.getHashKey(key)
+func (ch *consistentHashing) GetServer(key Key) Server {
+	hashKey := ch.getHashKey(key.name)
 
 	var i = hashKey
 	var condition = ch.ringSize
@@ -54,15 +54,15 @@ func (ch *consistentHashing) GetServer(key string) Server {
 	return Server{}
 }
 
-func (ch *consistentHashing) PlotKey(key string) int {
-	hashKey := ch.getHashKey(key)
-	ch.arr[hashKey] = NewKey(key)
+func (ch *consistentHashing) PlotKey(key Key) int {
+	hashKey := ch.getHashKey(key.name)
+	ch.arr[hashKey] = key
 	return hashKey
 }
 
-func (ch *consistentHashing) PlotServer(name string) int {
-	hashKey := ch.getHashKey(name)
-	ch.arr[hashKey] = NewServer(name)
+func (ch *consistentHashing) PlotServer(server Server) int {
+	hashKey := ch.getHashKey(server.name)
+	ch.arr[hashKey] = server
 	return hashKey
 }
 

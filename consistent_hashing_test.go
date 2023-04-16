@@ -6,7 +6,7 @@ func TestConsistentHashing_PlotKey_ShouldPlotKeyOnTheRingAsPerTheHashValue(t *te
 	testConsistentHashing := NewConsistentHashing(1000)
 
 	expectedHashKey := 718
-	actualHashKey := testConsistentHashing.PlotKey("key-example")
+	actualHashKey := testConsistentHashing.PlotKey(NewKey("key-example"))
 
 	if actualHashKey != expectedHashKey {
 		t.Errorf("hash key should be: %d but it is: %d", expectedHashKey, actualHashKey)
@@ -27,7 +27,7 @@ func TestConsistentHashing_PlotServer_ShouldPlotServerOnTheRingAsPerTheHashValue
 	testConsistentHashing := NewConsistentHashing(1000)
 
 	expectedHashKey := 29
-	actualHashKey := testConsistentHashing.PlotServer("server-example")
+	actualHashKey := testConsistentHashing.PlotServer(NewServer("server-example"))
 
 	if actualHashKey != expectedHashKey {
 		t.Errorf("hash key should be: %d but it is: %d", expectedHashKey, actualHashKey)
@@ -47,18 +47,18 @@ func TestConsistentHashing_PlotServer_ShouldPlotServerOnTheRingAsPerTheHashValue
 func TestConsistentHashing_GetServer_ShouldReturnServerForTheKey(t *testing.T) {
 	testConsistentHashing := NewConsistentHashing(50)
 
-	testConsistentHashing.PlotServer("s1")
-	testConsistentHashing.PlotKey("k1")
-	testConsistentHashing.PlotKey("k2")
+	testConsistentHashing.PlotServer(NewServer("s1"))
+	testConsistentHashing.PlotKey(NewKey("k1"))
+	testConsistentHashing.PlotKey(NewKey("k2"))
 
 	expectedServer := "s1"
-	actualServer := testConsistentHashing.GetServer("k1")
+	actualServer := testConsistentHashing.GetServer(NewKey("k1"))
 
 	if actualServer.name != expectedServer {
 		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)
 	}
 
-	actualServer = testConsistentHashing.GetServer("k2")
+	actualServer = testConsistentHashing.GetServer(NewKey("k2"))
 
 	if actualServer.name != expectedServer {
 		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)

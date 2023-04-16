@@ -54,6 +54,11 @@ func (ch *consistentHashing) GetServer(key Key) Server {
 	return Server{}
 }
 
+func (ch *consistentHashing) RemoveServer(server Server) {
+	hashKey := ch.getHashKey(server.name)
+	ch.arr[hashKey] = nil
+}
+
 func (ch *consistentHashing) PlotKey(key Key) int {
 	hashKey := ch.getHashKey(key.name)
 	ch.arr[hashKey] = key

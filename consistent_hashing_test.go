@@ -64,3 +64,41 @@ func TestConsistentHashing_GetServer_ShouldReturnServerForTheKey(t *testing.T) {
 		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)
 	}
 }
+
+func TestConsistentHashing_GetServer_ShouldPerformConsistentHashingByAddingOrRemovingServers(t *testing.T) {
+	testConsistentHashing := NewConsistentHashing(100)
+
+	testConsistentHashing.PlotKey(NewKey("k1"))
+	testConsistentHashing.PlotKey(NewKey("k2"))
+	testConsistentHashing.PlotKey(NewKey("k3"))
+
+	s1 := NewServer("s1")
+	s2 := NewServer("s2")
+
+	testConsistentHashing.PlotServer(s1)
+	testConsistentHashing.PlotServer(s2)
+
+	expectedServer := "s1"
+	actualServer := testConsistentHashing.GetServer(NewKey("k1"))
+
+	if actualServer.name != expectedServer {
+		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)
+	}
+
+	expectedServer = "s2"
+	actualServer = testConsistentHashing.GetServer(NewKey("k2"))
+
+	if actualServer.name != expectedServer {
+		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)
+	}
+
+	testConsistentHashing.RemoveServer(s2)
+
+	//now k2 should point to s1, since s2 is removed
+	expectedServer = "s1"
+	actualServer = testConsistentHashing.GetServer(NewKey("k2"))
+
+	if actualServer.name != expectedServer {
+		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)
+	}
+}

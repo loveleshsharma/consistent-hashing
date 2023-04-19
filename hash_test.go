@@ -15,23 +15,23 @@ func TestHashFunctionShouldReturnHashForTheGivenInput(t *testing.T) {
 		{
 			name:   "should return hash value 100",
 			input:  "input",
-			output: 100,
+			output: 99,
 		},
 		{
 			name:   "should return hash value 332",
 			input:  "abc",
-			output: 332,
+			output: 331,
 		},
 		{
 			name:   "should return hash value 249",
 			input:  "xyz",
-			output: 249,
+			output: 248,
 		},
 	}
 
 	testHash := NewHash()
 	for _, tt := range tests {
-		got := testHash.hash(tt.input, 1000, 1)
+		got := testHash.hash(tt.input, 1000)
 
 		if got != tt.output {
 			t.Errorf("got: %d, wanted: %d", got, tt.output)

@@ -76,5 +76,5 @@ func (ch *consistentHashing) getHashValue(index int) interface{} {
 }
 
 func (ch *consistentHashing) getHashKey(key string) int {
-	return ch.hash.hash(key, ch.ringSize, 1)
+	return ch.hash.hash(key, ch.ringSize)
 }

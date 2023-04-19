@@ -5,7 +5,7 @@ import "testing"
 func TestConsistentHashing_PlotKey_ShouldPlotKeyOnTheRingAsPerTheHashValue(t *testing.T) {
 	testConsistentHashing := NewConsistentHashing(1000)
 
-	expectedHashKey := 718
+	expectedHashKey := 717
 	actualHashKey := testConsistentHashing.PlotKey(NewKey("key-example"))
 
 	if actualHashKey != expectedHashKey {
@@ -26,7 +26,7 @@ func TestConsistentHashing_PlotKey_ShouldPlotKeyOnTheRingAsPerTheHashValue(t *te
 func TestConsistentHashing_PlotServer_ShouldPlotServerOnTheRingAsPerTheHashValue(t *testing.T) {
 	testConsistentHashing := NewConsistentHashing(1000)
 
-	expectedHashKey := 29
+	expectedHashKey := 28
 	actualHashKey := testConsistentHashing.PlotServer(NewServer("server-example"))
 
 	if actualHashKey != expectedHashKey {

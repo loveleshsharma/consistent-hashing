@@ -26,7 +26,7 @@ func (ch *consistentHashing) GetServer(key Key) Server {
 	var condition = ch.ringSize
 
 	//key is at the last index
-	if hashKey == ch.ringSize {
+	if hashKey == ch.ringSize-1 {
 		i = 0
 		condition = hashKey
 

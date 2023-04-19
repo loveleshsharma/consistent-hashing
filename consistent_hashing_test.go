@@ -64,7 +64,7 @@ func TestConsistentHashing_GetServer_ShouldStartVisitingTheRingIfTheKeyIsPresent
 	testConsistentHashing.PlotServer(NewServer("ss"))
 
 	expectedServer := "ss"
-	actualServer := testConsistentHashing.GetServer(NewKey("k1"))
+	actualServer := testConsistentHashing.GetServer(NewKey("13"))
 
 	if actualServer.name != expectedServer {
 		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)

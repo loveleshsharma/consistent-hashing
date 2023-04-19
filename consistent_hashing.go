@@ -11,14 +11,16 @@ type consistentHashing struct {
 
 func NewConsistentHashing(ringSize int) consistentHashing {
 	return consistentHashing{
-		arr:      make([]interface{}, ringSize-1),
+		arr:      make([]interface{}, ringSize),
 		hash:     NewHash(),
-		ringSize: ringSize - 1,
+		ringSize: ringSize,
 	}
 }
 
 func (ch *consistentHashing) GetServer(key Key) Server {
 	hashKey := ch.getHashKey(key.name)
+
+	var isRingVisitCompleted = false
 
 	var i = hashKey
 	var condition = ch.ringSize
@@ -42,7 +44,8 @@ func (ch *consistentHashing) GetServer(key Key) Server {
 				return server
 			}
 
-			if i == condition-1 {
+			if i == condition-1 && isRingVisitCompleted == false {
+				isRingVisitCompleted = true
 				i = 0
 				condition = hashKey
 				continue

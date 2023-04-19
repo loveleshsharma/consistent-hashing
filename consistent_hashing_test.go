@@ -5,7 +5,7 @@ import "testing"
 func TestConsistentHashing_PlotKey_ShouldPlotKeyOnTheRingAsPerTheHashValue(t *testing.T) {
 	testConsistentHashing := NewConsistentHashing(1000)
 
-	expectedHashKey := 717
+	expectedHashKey := 859
 	actualHashKey := testConsistentHashing.PlotKey(NewKey("key-example"))
 
 	if actualHashKey != expectedHashKey {
@@ -26,7 +26,7 @@ func TestConsistentHashing_PlotKey_ShouldPlotKeyOnTheRingAsPerTheHashValue(t *te
 func TestConsistentHashing_PlotServer_ShouldPlotServerOnTheRingAsPerTheHashValue(t *testing.T) {
 	testConsistentHashing := NewConsistentHashing(1000)
 
-	expectedHashKey := 28
+	expectedHashKey := 73
 	actualHashKey := testConsistentHashing.PlotServer(NewServer("server-example"))
 
 	if actualHashKey != expectedHashKey {
@@ -44,6 +44,33 @@ func TestConsistentHashing_PlotServer_ShouldPlotServerOnTheRingAsPerTheHashValue
 	}
 }
 
+func TestConsistentHashing_GetServer_ShouldReturnEmptyIfServerNotFound(t *testing.T) {
+	testConsistentHashing := NewConsistentHashing(50)
+
+	testConsistentHashing.PlotKey(NewKey("k1"))
+
+	expectedServer := "s1"
+	actualServer := testConsistentHashing.GetServer(NewKey("k1"))
+
+	if actualServer.name == expectedServer {
+		t.Errorf("server should not be found but it is %s", actualServer.name)
+	}
+}
+
+func TestConsistentHashing_GetServer_ShouldStartVisitingTheRingIfTheKeyIsPresentAtTheLastIndex(t *testing.T) {
+	testConsistentHashing := NewConsistentHashing(10)
+
+	testConsistentHashing.PlotKey(NewKey("13"))
+	testConsistentHashing.PlotServer(NewServer("ss"))
+
+	expectedServer := "ss"
+	actualServer := testConsistentHashing.GetServer(NewKey("k1"))
+
+	if actualServer.name != expectedServer {
+		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)
+	}
+
+}
 func TestConsistentHashing_GetServer_ShouldReturnServerForTheKey(t *testing.T) {
 	testConsistentHashing := NewConsistentHashing(50)
 
@@ -78,14 +105,14 @@ func TestConsistentHashing_GetServer_ShouldPerformConsistentHashingByAddingOrRem
 	testConsistentHashing.PlotServer(s1)
 	testConsistentHashing.PlotServer(s2)
 
-	expectedServer := "s1"
+	expectedServer := "s2"
 	actualServer := testConsistentHashing.GetServer(NewKey("k1"))
 
 	if actualServer.name != expectedServer {
 		t.Errorf("server should be: %s but it is %s", expectedServer, actualServer.name)
 	}
 
-	expectedServer = "s2"
+	expectedServer = "s1"
 	actualServer = testConsistentHashing.GetServer(NewKey("k2"))
 
 	if actualServer.name != expectedServer {
